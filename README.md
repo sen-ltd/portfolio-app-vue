@@ -6,7 +6,7 @@ SEN Portfolio ブラウザの **Vue 3 実装**。entry 021 (`portfolio-app-react
 
 **Live demo**: https://sen.ltd/portfolio/portfolio-app-vue/
 
-![Screenshot](./docs/screenshot.png)
+![Screenshot](./assets/screenshot.png)
 
 ## 比較対象
 
