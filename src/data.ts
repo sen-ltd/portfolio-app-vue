@@ -1,9 +1,12 @@
+// Data-fetching layer. In production the URL is always '/portfolio/data.json'
+// (same origin as the landing page). In dev we fall back to the local copy
+// under ../data/entries.json so the app works offline without a deployed
+// data file.
+
 import type { PortfolioData } from './types';
 
-// In prod this is the absolute URL on sen.ltd. In dev a Vite plugin
-// serves the data at /data.json from the monorepo source of truth.
 const PROD_URL = '/portfolio/data.json';
-const DEV_URL = '/data.json';
+const DEV_URL = import.meta.env.DEV ? '/data.json' : PROD_URL;
 
 export async function loadPortfolioData(): Promise<PortfolioData> {
   const url = import.meta.env.DEV ? DEV_URL : PROD_URL;

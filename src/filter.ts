@@ -1,6 +1,5 @@
-// Pure filter / sort helpers. Shared verbatim with portfolio-app-react
-// (and every future framework implementation) — the point of the
-// comparison series is that only the component layer differs.
+// Pure filter / sort helpers. Kept outside of React components so they
+// can be unit-tested with vitest and reused in other framework ports.
 
 import type { Entry, Lang } from './types';
 
@@ -8,9 +7,9 @@ export type SortKey = 'newest' | 'oldest' | 'number' | 'name';
 
 export type FilterState = {
   query: string;
-  category: string;
-  stack: string;
-  stage: string;
+  category: string; // 'all' or category id
+  stack: string;    // 'all' or stack id
+  stage: string;    // 'all' or stage id
   sort: SortKey;
 };
 

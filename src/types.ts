@@ -1,7 +1,6 @@
-// Types mirroring data/schema.json. Shared verbatim with other
-// framework implementations (React, Svelte, etc.) since TypeScript
-// types are framework-agnostic. Only the component layer differs
-// between implementations.
+// Types for the SEN portfolio data. These mirror data/schema.json and are
+// the single source of truth consumed by sen.ltd/portfolio/ and every
+// mini-app rendering of the portfolio.
 
 export type Lang = 'ja' | 'en';
 
