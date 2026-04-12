@@ -74,3 +74,10 @@ MIT. See [LICENSE](./LICENSE).
 ---
 
 Part of the [SEN portfolio series](https://sen.ltd/portfolio/). Entry 022.
+
+<!-- sen-publish:links -->
+## Links
+
+- 🌐 Demo: https://sen.ltd/portfolio/portfolio-app-vue/
+- 📝 dev.to: https://dev.to/sendotltd/porting-the-same-portfolio-landing-to-vue-3-41-smaller-gzip-than-react-l7j
+<!-- /sen-publish:links -->
