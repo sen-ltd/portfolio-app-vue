@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { Entry, Lang, LocalizedText } from './types';
+import { GitHubIcon, XIcon, QiitaIcon, DevToIcon } from './icons';
 
-defineProps<{
+const props = defineProps<{
   entry: Entry;
   lang: Lang;
   stackMap: Map<string, { id: string; name: string; color: string }>;
@@ -13,6 +15,38 @@ defineProps<{
     testsLabel: (n: number) => string;
   };
 }>();
+
+// Resolve icon-row link targets once per render; mirrors IconLinks in the
+// React reference. `sen` entries produce the JA article badge only when no
+// qiita article exists (avoids duplicating the same JA destination).
+const qiitaArticle = computed(() =>
+  props.entry.articles.find((a) => a.platform === 'qiita'),
+);
+const devtoArticle = computed(() =>
+  props.entry.articles.find((a) => a.platform === 'devto'),
+);
+const senArticle = computed(() =>
+  props.entry.articles.find((a) => a.platform === 'sen'),
+);
+const twitterUrl = computed(() => props.entry.social?.twitter);
+
+const showIconLinks = computed(
+  () =>
+    Boolean(props.entry.github) ||
+    Boolean(twitterUrl.value) ||
+    Boolean(qiitaArticle.value) ||
+    Boolean(devtoArticle.value) ||
+    Boolean(senArticle.value),
+);
+
+const showJaBadge = computed(
+  () => Boolean(senArticle.value) && !qiitaArticle.value,
+);
+
+const jaBadgeLabel = computed(() => (props.lang === 'ja' ? '記事' : 'JA'));
+const jaBadgeTitle = computed(() =>
+  props.lang === 'ja' ? 'JA 記事' : 'Japanese article',
+);
 </script>
 
 <template>
@@ -54,27 +88,60 @@ defineProps<{
       >
         ↗ {{ messages.demoLabel }}
       </a>
-      <a
-        v-if="entry.github"
-        :href="entry.github"
-        class="action-btn"
-        target="_blank"
-        rel="noopener"
-      >
-        {{ messages.githubLabel }}
-      </a>
-      <div v-if="entry.articles.length > 0" class="articles">
+
+      <div v-if="showIconLinks" class="icon-links">
         <a
-          v-for="a in entry.articles"
-          :key="a.url"
-          :href="a.url"
-          class="article-link"
+          v-if="entry.github"
+          :href="entry.github"
+          class="icon-link"
           target="_blank"
           rel="noopener"
+          title="GitHub"
         >
-          {{ a.platform }}
+          <GitHubIcon />
+        </a>
+        <a
+          v-if="twitterUrl"
+          :href="twitterUrl"
+          class="icon-link"
+          target="_blank"
+          rel="noopener"
+          title="X (Twitter)"
+        >
+          <XIcon />
+        </a>
+        <a
+          v-if="qiitaArticle"
+          :href="qiitaArticle.url"
+          class="icon-link"
+          target="_blank"
+          rel="noopener"
+          title="Qiita"
+        >
+          <QiitaIcon />
+        </a>
+        <a
+          v-if="devtoArticle"
+          :href="devtoArticle.url"
+          class="icon-link"
+          target="_blank"
+          rel="noopener"
+          title="dev.to"
+        >
+          <DevToIcon />
+        </a>
+        <a
+          v-if="showJaBadge && senArticle"
+          :href="senArticle.url"
+          class="article-badge"
+          target="_blank"
+          rel="noopener"
+          :title="jaBadgeTitle"
+        >
+          {{ jaBadgeLabel }}
         </a>
       </div>
+
       <span v-if="entry.testCount && entry.testCount > 0" class="tests-badge">
         {{ messages.testsLabel(entry.testCount) }}
       </span>
